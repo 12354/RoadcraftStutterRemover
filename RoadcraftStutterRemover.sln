@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36109.1 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoadcraftStutterRemover", "RoadcraftStutterRemover.csproj", "{7749A1DC-86E0-4981-8DD0-CC3F97706A00}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7749A1DC-86E0-4981-8DD0-CC3F97706A00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7749A1DC-86E0-4981-8DD0-CC3F97706A00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7749A1DC-86E0-4981-8DD0-CC3F97706A00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7749A1DC-86E0-4981-8DD0-CC3F97706A00}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {18CD52F1-41AC-40A4-B9A9-38CBEA436E4F}
+	EndGlobalSection
+EndGlobal

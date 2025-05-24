@@ -1,0 +1,42 @@
+name: Build .NET 8 Windows Application
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET 8
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build application
+      run: dotnet build --configuration Release --no-restore
+      
+    - name: Test
+      run: dotnet test --no-build --verbosity normal --configuration Release
+      continue-on-error: true
+      
+    - name: Publish application
+      run: dotnet publish --configuration Release --output ./publish --no-build
+      
+    - name: Create zip archive
+      run: Compress-Archive -Path ./publish/* -DestinationPath ./RoadcraftStutterRemover-Windows.zip
+      
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-build-zip
+        path: ./RoadcraftStutterRemover-Windows.zip
