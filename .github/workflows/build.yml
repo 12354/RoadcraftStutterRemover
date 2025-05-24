@@ -3,6 +3,8 @@ name: Build .NET 8 Windows Application
 on:
   push:
     branches: [ main, master ]
+    tags:
+      - 'v*'
   pull_request:
     branches: [ main, master ]
 
@@ -33,10 +35,36 @@ jobs:
       run: dotnet publish --configuration Release --output ./publish --no-build
       
     - name: Create zip archive
-      run: Compress-Archive -Path ./publish/* -DestinationPath ./RoadcraftStutterRemover-Windows.zip
+      run: Compress-Archive -Path ./publish/* -DestinationPath ./RoadcraftStutterRemover-${{ github.sha }}.zip
       
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: windows-build-zip
-        path: ./RoadcraftStutterRemover-Windows.zip
+        name: windows-build-${{ github.sha }}
+        path: ./RoadcraftStutterRemover-${{ github.sha }}.zip
+        retention-days: 30
+        
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: build-${{ github.sha }}
+        release_name: Build ${{ github.sha }}
+        draft: false
+        prerelease: true
+        body: |
+          Automated build from commit ${{ github.sha }}
+          
+          Branch: ${{ github.ref_name }}
+          Commit: ${{ github.event.head_commit.message }}
+        
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./RoadcraftStutterRemover-${{ github.sha }}.zip
+        asset_name: RoadcraftStutterRemover-${{ github.sha }}.zip
+        asset_content_type: application/zip
