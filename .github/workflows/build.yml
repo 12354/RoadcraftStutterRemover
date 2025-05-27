@@ -1,42 +1,39 @@
-name: Build .NET 8 Windows Application
-
-on:
+name: Build
+on: 
   push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
-
+    tags:
+      - 'release*'
 jobs:
   build:
+ 
     runs-on: windows-latest
-    
+ 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v1
+      name: Checkout Code
+     
+    - name: Setup MSBuild Path
+      uses: microsoft/setup-msbuild@v1.0.2
+       
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1
+     
+    - name: Restore NuGet Packages
+      run: nuget restore RoadcraftStutterRemove.sln
+ 
+    - name: Build and Publish Web App
+      run: msbuild RoadcraftStutterRemove.sln /p:Configuration=Release /p:DeployOnBuild=true /p:Platform=x64
       
-    - name: Setup .NET 8
-      uses: actions/setup-dotnet@v4
+    - name: Build
+      shell: bash
+      run: |
+          # Pack files
+          # Pack to zip for Windows
+           7z a -tzip "RoadcraftStutterRemover.zip" "./bin\x64\Release\*"
+    - name: Publish
+      uses: softprops/action-gh-release@v1
       with:
-        dotnet-version: '8.0.x'
-        
-    - name: Restore dependencies
-      run: dotnet restore
-      
-    - name: Build application
-      run: dotnet build --configuration Release --no-restore
-      
-    - name: Test
-      run: dotnet test --no-build --verbosity normal --configuration Release
-      continue-on-error: true
-      
-    - name: Publish application
-      run: dotnet publish --configuration Release --output ./publish --no-build
-      
-    - name: Create zip archive
-      run: Compress-Archive -Path ./publish/* -DestinationPath ./RoadcraftStutterRemover-Windows.zip
-      
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: windows-build-zip
-        path: ./RoadcraftStutterRemover-Windows.zip
+       files: |
+        RoadcraftStutterRemover.zip
+      env:
+       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
