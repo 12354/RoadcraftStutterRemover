@@ -1,5 +1,4 @@
 ﻿using Reloaded.Memory.Sigscan;
-using Reloaded.Memory.Sources;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -7,6 +6,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using Reloaded.Memory;
+using Reloaded.Memory.Sources;
 
 namespace RoadcraftStutterRemover
 {
@@ -66,7 +67,7 @@ namespace RoadcraftStutterRemover
                 var fn = fd.FileName;
                 var data = File.ReadAllBytes(fn);
                 var scanner = new Scanner(data);
-                var offset = scanner.CompiledFindPattern(Pattern);
+                var offset = scanner.FindPattern_Compiled(Pattern);
                 if (offset.Found)
                 {
                     Console.WriteLine("Found patch location. Patching...");
@@ -99,7 +100,7 @@ namespace RoadcraftStutterRemover
 
                 var snowRunnerProcess = p.First();
                 var scanner = new Scanner(snowRunnerProcess, snowRunnerProcess.MainModule);
-                var offset = scanner.CompiledFindPattern(Pattern);
+                var offset = scanner.FindPattern_Compiled(Pattern);
                 Console.WriteLine("Searching for patch location");
                 if (offset.Found)
                 {
@@ -107,7 +108,8 @@ namespace RoadcraftStutterRemover
                     try
                     {
                         var memory = new ExternalMemory(snowRunnerProcess);
-                        var baseAddress = snowRunnerProcess.MainModule.BaseAddress + offset.Offset;
+                        var baseAddress =(snowRunnerProcess.MainModule.BaseAddress + offset.Offset);
+
                         memory.WriteRaw(baseAddress, Patch);
                         Console.WriteLine("Patch in memory successful!");
                     }
