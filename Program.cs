@@ -90,12 +90,12 @@ namespace RoadcraftStutterRemover
             else if (input == 2)
             {
                 Console.WriteLine("Looking for Roadcraft - Retail.exe");
-                var p = Process.GetProcessesByName("Roadcraft - Retail.exe");
+                var p = Process.GetProcessesByName("Roadcraft - Retail");
                 while (p.Length == 0)
                 {
                     Console.WriteLine("Waiting for Roadcraft - Retail.exe");
                     Thread.Sleep(1000);
-                    p = Process.GetProcessesByName("Roadcraft - Retail.exe");
+                    p = Process.GetProcessesByName("Roadcraft - Retail");
                 }
 
                 var snowRunnerProcess = p.First();
