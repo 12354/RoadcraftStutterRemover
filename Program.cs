@@ -16,8 +16,8 @@ namespace RoadcraftStutterRemover
     {
         /// <summary>
         /// Original code
-        ///"Roadcraft - Retail.exe"+18B1E80 - 41 81 FC 19020000     - cmp r12d,00000219 { 537 }
-        ///"Roadcraft - Retail.exe"+18B1E87 - 0F84 9F000000         - je ""Roadcraft - Retail.exe""+18B1F2C { ->"Roadcraft - Retail.exe"+18B1F2C }
+        /// "Roadcraft - Retail.exe"+1A63995 - 41 81 FD 19020000     - cmp r13d,00000219
+        /// "Roadcraft - Retail.exe"+1A6399C - 0F84 9B000000         - je ""Roadcraft - Retail.exe""+1A63A3D
         /// 
         /// The original code reloads all hid devices when a WM_DEVICECHANGE (0x219) message was found
         /// This patches this check to never find the message, therefore removing the lag and input loss
@@ -25,7 +25,7 @@ namespace RoadcraftStutterRemover
         /// </summary>
 
 
-        private static readonly string Pattern = "41 81 FC 19 02 00 00 0F 84"; //cmp edx,0x219;jne
+        private static readonly string Pattern = "41 81 FD 19 02 00 00 0F 84"; //cmp edx,0x219;jne
 
         private static readonly byte[] Patch =
             { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 }; //or eax,01;nop;nop;nop
